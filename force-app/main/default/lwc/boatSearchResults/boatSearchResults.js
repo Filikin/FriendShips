@@ -22,7 +22,7 @@ export default class BoatSearchResults extends LightningElement {
   // wired getBoats method 
   @wire(getBoats) wiredBoats({ error, data }) {
     if (data) {
-        boats = data;
+        this.boats = data;
     } else if (error) {
        this.boats = undefined;
        this.error = error;
