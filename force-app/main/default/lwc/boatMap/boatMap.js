@@ -1,13 +1,13 @@
 import { LightningElement, wire, api } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
-import { subscribe, MessageContext } from 'lightning/messageService';
+import { subscribe, MessageContext, APPLICATION_SCOPE } from 'lightning/messageService';
 // import BOATMC from the message channel
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 
 // Declare the const LONGITUDE_FIELD for the boat's Longitude__s
-import LONGITUDE_FIELD from '@salesforce/schema/Boat__c.Geolocation__Longitude__s';
+const LONGITUDE_FIELD = 'Boat__c.Geolocation__Longitude__s';
 // Declare the const LATITUDE_FIELD for the boat's Latitude
-import LATITUDE_FIELD from '@salesforce/schema/Boat__c.Geolocation__Latitude__s';
+const LATITUDE_FIELD = 'Boat__c.Geolocation__Latitude__s';
 // Declare the const BOAT_FIELDS as a list of [LONGITUDE_FIELD, LATITUDE_FIELD];
 const BOAT_FIELDS = [LONGITUDE_FIELD, LATITUDE_FIELD];
 export default class BoatMap extends LightningElement {
@@ -17,7 +17,7 @@ export default class BoatMap extends LightningElement {
 
   // Getter and Setter to allow for logic to run on recordId change
   // this getter must be public
-  @api
+  @api 
   get recordId() {
     return this.boatId;
   }
@@ -34,7 +34,7 @@ export default class BoatMap extends LightningElement {
   messageContext;
   // Getting record's location to construct map markers using recordId
   // Wire the getRecord method using ('$boatId')
-  @wire(getRecord, {recordId: '$boatId'})
+  @wire(getRecord, {recordId: '$boatId',  fields: BOAT_FIELDS})
   wiredRecord({ error, data }) {
     // Error handling
     if (data) {
@@ -53,15 +53,15 @@ export default class BoatMap extends LightningElement {
       this.mapMarkers = [];
     }
   }
-  subscribeToMessageChannel() {
-    this.subscription = subscribe(
-        this.messageContext,
-        BOATMC, (message) => {
-            this.handleMessage(message);
-        });
-  }
-  handleMessage(message) {
-    this.recordId = message.recordId;
+  subscribeMC() {
+      if (!this.subscription) {
+      this.subscription = subscribe(
+          this.messageContext,
+          BOATMC,
+          (message) => {this.boatId = message.recordId},
+          { scope: APPLICATION_SCOPE }
+      );
+    }
   }
   // Runs when component is connected, subscribes to BoatMC
   connectedCallback() {
@@ -71,7 +71,7 @@ export default class BoatMap extends LightningElement {
       return;
     }
     // Subscribe to the message channel to retrieve the recordID and assign it to boatId.
-    this.subscribeToMessageChannel();
+    this.subscribeMC();
   }
 
   // Creates the map markers array with the current boat's location for the map.
