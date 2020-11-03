@@ -11,7 +11,7 @@
       </lightning-layout-item>
       <!-- Bottom -->
       <lightning-layout-item size="12" class="slds-var-p-top_small slds-is-relative">
-        <div if:false={isLoading} class="slds-is-relative">
+        <div if:true={isLoading} class="slds-is-relative">
             <lightning-spinner variant="brand" alternative-text="Loading"></lightning-spinner>
         </div>
           <c-boat-search-results></c-boat-search-results>
