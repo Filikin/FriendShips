@@ -30,11 +30,19 @@ export default class BoatSearchResults extends LightningElement {
  }
   // public function that updates the existing boatTypeId property
   // uses notifyLoading
-  searchBoats(boatTypeId) { }
+  searchBoats(boatTypeId) { 
+    this.notifyLoading(true);
+    // do something
+    this.notifyLoading(false);
+  }
   
   // this public function must refresh the boats asynchronously
   // uses notifyLoading
-  refresh() { }
+  refresh() {
+    this.notifyLoading(true);
+    // do something
+    this.notifyLoading(false);
+   }
   
   // this function must update selectedBoatId and call sendMessageService
   updateSelectedTile(event) {
@@ -83,5 +91,11 @@ export default class BoatSearchResults extends LightningElement {
         .finally(() => {});
   }
   // Check the current value of isLoading before dispatching the doneloading or loading custom event
-  notifyLoading(isLoading) { }
+  notifyLoading(isLoading) {
+    if (isLoading){
+      this.dispatchEvent(new CustomEvent('loading'));
+    } else{
+      this.dispatchEvent(new CustomEvent('doneloading'));
+    }
+  }
 }
