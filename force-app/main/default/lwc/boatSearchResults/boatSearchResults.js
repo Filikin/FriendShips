@@ -22,7 +22,7 @@ export default class BoatSearchResults extends LightningElement {
   // wired getBoats method 
   @wire(getBoats) wiredBoats({ error, data }) {
     if (data) {
-        this.boats = data;
+      this.boats = {data: data};
     } else if (error) {
        this.boats = undefined;
        this.error = error;
@@ -30,9 +30,10 @@ export default class BoatSearchResults extends LightningElement {
  }
   // public function that updates the existing boatTypeId property
   // uses notifyLoading
-  searchBoats(boatTypeId) { 
+  @api searchBoats(boatTypeId) { 
     this.notifyLoading(true);
     // do something
+    boatTypeId = boatTypeId;
     this.notifyLoading(false);
   }
   
