@@ -1,4 +1,4 @@
-import { LightningElement, wire, api } from 'lwc';
+import { LightningElement, wire, api, track } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { subscribe, MessageContext, APPLICATION_SCOPE } from 'lightning/messageService';
 // import BOATMC from the message channel
@@ -27,7 +27,7 @@ export default class BoatMap extends LightningElement {
   }
 
   error = undefined;
-  mapMarkers = [];
+  @track mapMarkers = [];
 
   // Initialize messageContext for Message Service
   @wire(MessageContext)
@@ -36,6 +36,7 @@ export default class BoatMap extends LightningElement {
   // Wire the getRecord method using ('$boatId')
   @wire(getRecord, {recordId: '$boatId',  fields: BOAT_FIELDS})
   wiredRecord({ error, data }) {
+
     // Error handling
     if (data) {
       this.error = undefined;
@@ -79,6 +80,7 @@ export default class BoatMap extends LightningElement {
     var Mobj = {
       location: {Longitude: Longitude, Latitude: Latitude}
     }
+    this.mapMarkers = [];
     this.mapMarkers.push(Mobj);
   }
 

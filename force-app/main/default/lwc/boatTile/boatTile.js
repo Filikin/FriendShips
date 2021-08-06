@@ -9,7 +9,7 @@ export default class BoatTile extends LightningElement {
     
     // Getter for dynamically setting the background image for the picture
     get backgroundStyle() {
-        return "background-image:url(${this.boat.Picture__c})";
+        return "background-image:url('"+this.boat.Picture__c+"')";
      }
     
     // Getter for dynamically setting the tile class based on whether the
@@ -23,9 +23,9 @@ export default class BoatTile extends LightningElement {
      }
     
     // Fires event with the Id of the boat that has been selected.
-    selectBoat(event) {
-        this.selectedBoatId=event.detail.value;
-        if (this.selectedBoatId == this.boat.id){
+    selectBoat() {
+        this.selectedBoatId=this.boat.Id;
+        if (this.selectedBoatId == this.boat.Id){
             const selectEvent=new CustomEvent('boatselect', {detail : {boatId : this.boat.Id}});
             this.dispatchEvent(selectEvent);
         }

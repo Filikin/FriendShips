@@ -1,6 +1,5 @@
 import { LightningElement, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-import getBoats from '@salesforce/apex/BoatDataService.getBoats';
 
  // imports
  export default class BoatSearch extends NavigationMixin(LightningElement) {
@@ -31,14 +30,4 @@ import getBoats from '@salesforce/apex/BoatDataService.getBoats';
          }
      });
    }
-
-   @wire(getBoats) boats({ error, data }) {
-      if (data) {
-         this.template.querySelector('c-boat-search-results').wiredBoats({error, data});
-      } else if (error) {
-         this.searchOptions = undefined;
-         this.error = error;
-      }
-   }
-   
-  }
+}

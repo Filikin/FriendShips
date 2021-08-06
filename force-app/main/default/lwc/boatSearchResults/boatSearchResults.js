@@ -3,6 +3,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { publish, MessageContext } from 'lightning/messageService';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
+import { refreshApex } from '@salesforce/apex';
 
 const SUCCESS_TITLE = 'Success';
 const MESSAGE_SHIP_IT     = 'Ship it!';
@@ -20,7 +21,7 @@ export default class BoatSearchResults extends LightningElement {
   @wire(MessageContext)
   messageContext;
   // wired getBoats method 
-  @wire(getBoats) wiredBoats({ error, data }) {
+  @wire(getBoats, {boatTypeId: '$boatTypeId'}) wiredBoats({error, data}) {
     if (data) {
       this.boats = {data: data};
     } else if (error) {
@@ -33,23 +34,25 @@ export default class BoatSearchResults extends LightningElement {
   @api searchBoats(boatTypeId) { 
     this.notifyLoading(true);
     // do something
-    boatTypeId = boatTypeId;
+    this.boatTypeId = boatTypeId;
     this.notifyLoading(false);
   }
   
   // this public function must refresh the boats asynchronously
   // uses notifyLoading
-  refresh() {
+  @api refresh() {
     this.notifyLoading(true);
+    alert ("in refresh");
     // do something
+//    refreshApex(this.boats);
     this.notifyLoading(false);
    }
   
   // this function must update selectedBoatId and call sendMessageService
   updateSelectedTile(event) {
-      selectedBoatID=event.detail.boatId;
-      this.sendMessageService(selectedBoatID);
-   }
+    this.selectedBoatId=event.detail.boatId;
+    this.sendMessageService(this.selectedBoatId);
+  }
   
   // Publishes the selected boat Id on the BoatMC.
   sendMessageService(boatId) { 
