@@ -12,7 +12,12 @@ const ERROR_TITLE   = 'Error';
 const ERROR_VARIANT = 'error';
 export default class BoatSearchResults extends LightningElement {
   @api selectedBoatId;
-  columns = [];
+  columns = [
+    { label: 'Name', fieldName: 'Name', editable: 'true' },
+    { label: 'Length', fieldName: 'Length__c', type: 'number' , editable: 'true'},
+    { label: 'Price', fieldName: 'Price__c', type: 'currency' , editable: 'true'},
+    { label: 'Description', fieldName: 'Description__c' , editable: 'true'},
+  ];
   boatTypeId = '';
   @track boats;
   isLoading = false;
@@ -67,6 +72,7 @@ export default class BoatSearchResults extends LightningElement {
   // Show a toast message with the title
   // clear lightning-datatable draft values
   handleSave() {
+    alert ("First");
     const recordInputs = event.detail.draftValues.slice().map(draft => {
         const fields = Object.assign({}, draft);
         return { fields };

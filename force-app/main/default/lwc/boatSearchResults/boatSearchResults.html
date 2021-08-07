@@ -18,7 +18,11 @@
         </lightning-tab>
         <lightning-tab label="Boat Editor">
           <!-- Scrollable div and lightning datatable go here -->
-        </lightning-tab>
+          <div class="slds-scrollable_y">
+            <lightning-datatable  show-row-number-column hide-checkbox-column key-field="id" data={boats.data} columns={columns} onsave={handleSave}>
+              </lightning-datatable>
+          </div>
+          </lightning-tab>
          <lightning-tab label="Boats Near Me">
           <!-- boatsNearMe component goes here -->
           <c-boats-near-me></c-boats-near-me>
