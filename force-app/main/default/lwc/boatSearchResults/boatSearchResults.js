@@ -76,14 +76,21 @@ export default class BoatSearchResults extends LightningElement {
         const fields = Object.assign({}, draft);
         return { fields };
     });
-    alert (JSON.stringify(this.boats.data));
-    this.boats.data=[];
+//    this.boats.data=[];
     const promises = recordInputs.map(recordInput => {
-            //update boat record
-            alert(recordInput.fields.Id);
-            alert(JSON.stringify(recordInput));
-            this.boats.data.push(recordInput.fields);
-            alert(JSON.stringify(this.boats.data[0])) // causes problems because Contact__r is undefined
+      let oneBoat = this.boats.data.find(k => recordInput.fields.Id == k.Id);
+      alert(JSON.stringify(oneBoat));
+      alert(JSON.stringify(recordInput.fields));
+      //update boat record
+      for (let oneField in recordInput.fields) {
+        alert(oneField);
+        alert(oneBoat[oneField]);
+        alert(recordInput.fields[oneField]);
+        oneBoat[oneField] = 'Fred'; // recordInput.fields[oneField];
+//        oneBoat.put()
+      }
+      alert(JSON.stringify(oneBoat));
+
     });
     Promise.all(promises)
         .then(() => {
