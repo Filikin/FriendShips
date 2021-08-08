@@ -71,15 +71,19 @@ export default class BoatSearchResults extends LightningElement {
   // This method must save the changes in the Boat Editor
   // Show a toast message with the title
   // clear lightning-datatable draft values
-  handleSave() {
-    alert ("First");
+  handleSave(event) {
     const recordInputs = event.detail.draftValues.slice().map(draft => {
         const fields = Object.assign({}, draft);
         return { fields };
     });
+    alert (JSON.stringify(this.boats.data));
+    this.boats.data=[];
     const promises = recordInputs.map(recordInput => {
             //update boat record
-            alert('Hi')
+            alert(recordInput.fields.Id);
+            alert(JSON.stringify(recordInput));
+            this.boats.data.push(recordInput.fields);
+            alert(JSON.stringify(this.boats.data[0])) // causes problems because Contact__r is undefined
     });
     Promise.all(promises)
         .then(() => {
