@@ -4,6 +4,7 @@ import { publish, MessageContext } from 'lightning/messageService';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
 import { refreshApex } from '@salesforce/apex';
+import { updateRecord } from 'lightning/uiRecordApi';
 
 const SUCCESS_TITLE = 'Success';
 const MESSAGE_SHIP_IT     = 'Ship it!';
@@ -21,12 +22,14 @@ export default class BoatSearchResults extends LightningElement {
   boatTypeId = '';
   @track boats;
   isLoading = false;
-  
+  @track provisionedValue;
   // wired message context
   @wire(MessageContext)
   messageContext;
   // wired getBoats method 
-  @wire(getBoats, {boatTypeId: '$boatTypeId'}) wiredBoats({error, data}) {
+  @wire(getBoats, {boatTypeId: '$boatTypeId'}) wiredBoats(provisionedValue) {
+    this.provisionedValue = provisionedValue;
+    const {error, data} = provisionedValue;
     if (data) {
       this.boats = {data: data};
     } else if (error) {
@@ -47,9 +50,9 @@ export default class BoatSearchResults extends LightningElement {
   // uses notifyLoading
   @api refresh() {
     this.notifyLoading(true);
-    alert ("in refresh");
     // do something
-//    refreshApex(this.boats);
+    refreshApex(this.provisionedValue);
+    this.boatTypeId = '';
     this.notifyLoading(false);
    }
   
@@ -78,19 +81,8 @@ export default class BoatSearchResults extends LightningElement {
     });
 //    this.boats.data=[];
     const promises = recordInputs.map(recordInput => {
-      let oneBoat = this.boats.data.find(k => recordInput.fields.Id == k.Id);
-      alert(JSON.stringify(oneBoat));
-      alert(JSON.stringify(recordInput.fields));
       //update boat record
-      for (let oneField in recordInput.fields) {
-        alert(oneField);
-        alert(oneBoat[oneField]);
-        alert(recordInput.fields[oneField]);
-        oneBoat[oneField] = 'Fred'; // recordInput.fields[oneField];
-//        oneBoat.put()
-      }
-      alert(JSON.stringify(oneBoat));
-
+      updateRecord(recordInput);
     });
     Promise.all(promises)
         .then(() => {
@@ -100,6 +92,8 @@ export default class BoatSearchResults extends LightningElement {
             variant: SUCCESS_VARIANT,
           });
           this.dispatchEvent(evt);
+this.template.querySelector("lightning-datatable").draftValues = [];
+ this.refresh ();
         })
         .catch(error => {
           const evt = new ShowToastEvent({
