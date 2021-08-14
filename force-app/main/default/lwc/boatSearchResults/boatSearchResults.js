@@ -3,6 +3,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { publish, MessageContext } from 'lightning/messageService';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
+import updateBoatList from '@salesforce/apex/BoatDataService.updateBoatList';
 import { refreshApex } from '@salesforce/apex';
 import { updateRecord } from 'lightning/uiRecordApi';
 
@@ -52,7 +53,7 @@ export default class BoatSearchResults extends LightningElement {
     this.notifyLoading(true);
     // do something
     refreshApex(this.provisionedValue);
-    this.boatTypeId = '';
+//    this.boatTypeId = '';
     this.notifyLoading(false);
    }
   
@@ -75,35 +76,30 @@ export default class BoatSearchResults extends LightningElement {
   // Show a toast message with the title
   // clear lightning-datatable draft values
   handleSave(event) {
-    const recordInputs = event.detail.draftValues.slice().map(draft => {
-        const fields = Object.assign({}, draft);
-        return { fields };
-    });
-//    this.boats.data=[];
-    const promises = recordInputs.map(recordInput => {
-      //update boat record
-      updateRecord(recordInput);
-    });
-    Promise.all(promises)
-        .then(() => {
-          const evt = new ShowToastEvent({
-            title: SUCCESS_TITLE,
-            message: MESSAGE_SHIP_IT,
-            variant: SUCCESS_VARIANT,
-          });
-          this.dispatchEvent(evt);
-this.template.querySelector("lightning-datatable").draftValues = [];
- this.refresh ();
-        })
-        .catch(error => {
-          const evt = new ShowToastEvent({
-            title: ERROR_TITLE,
-            variant: ERROR_VARIANT,
-          });
-          this.dispatchEvent(evt);
+    this.notifyLoading(true);
+    const updatedFields = event.detail.draftValues;
+    // Update the records via Apex
+    updateBoatList({data: updatedFields})
+    .then(() => {
+      const evt = new ShowToastEvent({
+        title: SUCCESS_TITLE,
+        message: MESSAGE_SHIP_IT,
+        variant: SUCCESS_VARIANT,
+      });
+      this.dispatchEvent(evt);
+      this.template.querySelector("lightning-datatable").draftValues = [];
+      this.refresh ();
 
-        })
-        .finally(() => {});
+    })
+    .catch(error => {
+      const evt = new ShowToastEvent({
+        title: ERROR_TITLE,
+        variant: ERROR_VARIANT,
+      });
+      this.dispatchEvent(evt);
+    })
+    .finally(() => {});
+
   }
   // Check the current value of isLoading before dispatching the doneloading or loading custom event
   notifyLoading(isLoading) {
