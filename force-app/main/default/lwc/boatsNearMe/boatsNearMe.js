@@ -20,11 +20,34 @@ export default class BoatsNearMe extends LightningElement {
   
   // Controls the isRendered property
   // Calls getLocationFromBrowser()
-  renderedCallback() { }
+  renderedCallback() { 
+    if (!this.isRendered){
+      this.getLocationFromBrowser ();
+      this.isRendered = true;
+    }
+  }
   
   // Gets the location from the Browser
   // position => {latitude and longitude}
-  getLocationFromBrowser() { }
+  getLocationFromBrowser() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+
+          // Get the Latitude and Longitude from Geolocation API
+          this.latitude = position.coords.latitude;
+          this.longitude = position.coords.longitude;
+          
+          // Add Latitude and Longitude to the markers list.
+          this.mapMarkers = [{
+              location : {
+                  Latitude: this.latitude,
+                  Longitude : this.longitude
+              },
+              title : 'You are here'
+          }];
+      });
+    }
+  }
   
   // Creates the map markers
   createMapMarkers(boatData) {
