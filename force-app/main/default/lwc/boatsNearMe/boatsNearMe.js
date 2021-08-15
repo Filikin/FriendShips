@@ -1,4 +1,4 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, wire, track } from 'lwc';
 import getBoatsByLocation from '@salesforce/apex/BoatDataService.getBoatsByLocation';
 
 const LABEL_YOU_ARE_HERE = 'You are here!';
@@ -16,7 +16,19 @@ export default class BoatsNearMe extends LightningElement {
   // Add the wired method from the Apex Class
   // Name it getBoatsByLocation, and use latitude, longitude and boatTypeId
   // Handle the result and calls createMapMarkers
-  @wire(getBoatsByLocation) wiredBoatsJSON({error, data}) { }
+  @wire(getBoatsByLocation, {latitude: '$latitude', longitude: '$longitude', boatTypeId: '$boatTypeId'}) wiredBoatsJSON({error, data}) {
+    if (data) {
+      this.createMapMarkers(data);
+    } else if (error) {
+       const evt = new ShowToastEvent({
+        title: ERROR_TITLE,
+        variant: ERROR_VARIANT,
+        message: error
+      });
+      this.dispatchEvent(evt);
+    }
+    this.isLoading = false;
+   }
   
   // Controls the isRendered property
   // Calls getLocationFromBrowser()
@@ -36,15 +48,7 @@ export default class BoatsNearMe extends LightningElement {
           // Get the Latitude and Longitude from Geolocation API
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
-          
-          // Add Latitude and Longitude to the markers list.
-          this.mapMarkers = [{
-              location : {
-                  Latitude: this.latitude,
-                  Longitude : this.longitude
-              },
-              title : 'You are here'
-          }];
+          this.boatTypeId = '';
       });
     }
   }
@@ -53,5 +57,14 @@ export default class BoatsNearMe extends LightningElement {
   createMapMarkers(boatData) {
      // const newMarkers = boatData.map(boat => {...});
      // newMarkers.unshift({...});
-   }
+     // Add Latitude and Longitude to the markers list.
+      this.mapMarkers = [{
+            location : {
+                Latitude: this.latitude,
+                Longitude : this.longitude
+            },
+            title : LABEL_YOU_ARE_HERE,
+            icon: ICON_STANDARD_USER
+        }];
+ }
 }

@@ -53,7 +53,6 @@ export default class BoatSearchResults extends LightningElement {
     this.notifyLoading(true);
     // do something
     refreshApex(this.provisionedValue);
-//    this.boatTypeId = '';
     this.notifyLoading(false);
    }
   
@@ -95,6 +94,7 @@ export default class BoatSearchResults extends LightningElement {
       const evt = new ShowToastEvent({
         title: ERROR_TITLE,
         variant: ERROR_VARIANT,
+        message: error
       });
       this.dispatchEvent(evt);
     })
