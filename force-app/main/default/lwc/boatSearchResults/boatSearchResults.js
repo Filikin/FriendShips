@@ -20,7 +20,7 @@ export default class BoatSearchResults extends LightningElement {
     { label: 'Price', fieldName: 'Price__c', type: 'currency' , editable: 'true'},
     { label: 'Description', fieldName: 'Description__c' , editable: 'true'},
   ];
-  boatTypeId = '';
+  @api boatTypeId = '';
   @track boats;
   isLoading = false;
   @track provisionedValue;
