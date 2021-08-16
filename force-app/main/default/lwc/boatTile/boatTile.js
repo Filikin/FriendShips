@@ -1,12 +1,19 @@
 // imports
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
+import { subscribe, MessageContext, APPLICATION_SCOPE } from 'lightning/messageService';
+import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 
 const TILE_WRAPPER_SELECTED_CLASS = 'tile-wrapper selected';
 const TILE_WRAPPER_UNSELECTED_CLASS  = 'tile-wrapper';
 export default class BoatTile extends LightningElement {
     @api boat;
     @api selectedBoatId;
+    subscription = null;
     
+    // Initialize messageContext for Message Service
+    @wire(MessageContext)
+    messageContext;
+  
     // Getter for dynamically setting the background image for the picture
     get backgroundStyle() {
         return "background-image:url('"+this.boat.Picture__c+"')";
@@ -30,4 +37,26 @@ export default class BoatTile extends LightningElement {
             this.dispatchEvent(selectEvent);
         }
      }
-  }
+  
+     subscribeMC() {
+        if (!this.subscription) {
+        this.subscription = subscribe(
+            this.messageContext,
+            BOATMC,
+            (message) => {
+                this.selectedBoatId = message.recordId},
+            { scope: APPLICATION_SCOPE }
+        );
+      }
+    }
+    // Runs when component is connected, subscribes to BoatMC
+    connectedCallback() {
+      // recordId is populated on Record Pages, and this component
+      // should not update when this component is on a record page.
+      if (this.subscription || this.recordId) {
+        return;
+      }
+      // Subscribe to the message channel to retrieve the recordID and assign it to boatId.
+      this.subscribeMC();
+    }
+}
