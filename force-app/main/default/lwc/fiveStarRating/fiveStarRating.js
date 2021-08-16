@@ -1,5 +1,5 @@
 //import fivestar static resource, call it fivestar
-
+import FIVESTAR from '@salesforce/resourceUrl/fivestar';
 // add constants here
 
 export default class FiveStarRating extends LightningElement {

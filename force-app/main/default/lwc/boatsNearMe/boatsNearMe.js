@@ -7,8 +7,7 @@ const ICON_STANDARD_USER = 'standard:user';
 const ERROR_TITLE = 'Error loading Boats Near Me';
 const ERROR_VARIANT = 'error';
 export default class BoatsNearMe extends LightningElement {
-  boatTypeId;
-  @api boattypeid;
+  @api boatTypeId;
   mapMarkers = [];
   isLoading = true;
   isRendered;
@@ -50,7 +49,7 @@ export default class BoatsNearMe extends LightningElement {
           // Get the Latitude and Longitude from Geolocation API
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
-          this.boatTypeId = this.boattypeid;
+//          this.boatTypeId = this.boattypeid;
       });
     }
   }

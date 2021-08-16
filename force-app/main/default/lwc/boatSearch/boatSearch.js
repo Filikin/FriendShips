@@ -1,14 +1,14 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 
  // imports
  export default class BoatSearch extends NavigationMixin(LightningElement) {
-    isLoading = false;
+   isLoading = false;
     
     // Handles loading event
     handleLoading() {
         this.isLoading=true;
-     }
+    }
     
     // Handles done loading event
     handleDoneLoading() {

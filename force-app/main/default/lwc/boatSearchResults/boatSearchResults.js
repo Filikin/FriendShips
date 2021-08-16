@@ -23,20 +23,12 @@ export default class BoatSearchResults extends LightningElement {
   @api boatTypeId = '';
   @track boats;
   isLoading = false;
-  @track provisionedValue;
   // wired message context
   @wire(MessageContext)
   messageContext;
   // wired getBoats method 
-  @wire(getBoats, {boatTypeId: '$boatTypeId'}) wiredBoats(provisionedValue) {
-    this.provisionedValue = provisionedValue;
-    const {error, data} = provisionedValue;
-    if (data) {
-      this.boats = {data: data};
-    } else if (error) {
-       this.boats = undefined;
-       this.error = error;
-    }
+  @wire(getBoats, {boatTypeId: '$boatTypeId'}) wiredBoats(result) {
+    this.boats = result;
  }
   // public function that updates the existing boatTypeId property
   // uses notifyLoading
@@ -49,10 +41,10 @@ export default class BoatSearchResults extends LightningElement {
   
   // this public function must refresh the boats asynchronously
   // uses notifyLoading
-  @api refresh() {
+  async refresh() {
     this.notifyLoading(true);
     // do something
-    refreshApex(this.provisionedValue);
+    refreshApex(this.boats);
     this.notifyLoading(false);
    }
   
