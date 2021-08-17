@@ -1,17 +1,25 @@
+import { loadStyle, loadScript } from 'lightning/platformResourceLoader';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 //import fivestar static resource, call it fivestar
-import FIVESTAR from '@salesforce/resourceUrl/fivestar';
+import firestar from '@salesforce/resourceUrl/fivestar';
 // add constants here
+const ERROR_TITLE   = 'Error loading five-star';
+const ERROR_VARIANT = 'error';
+const EDITABLE_CLASS  = 'c-rating-wrapper';
+const READ_ONLY_CLASS  = 'readonly c-rating-wrapper';
 
 export default class FiveStarRating extends LightningElement {
   //initialize public readOnly and value properties
-  readOnly;
-  value;
+  readOnly=false;
+  value=5;
 
   editedValue;
   isRendered;
 
   //getter function that returns the correct class depending on if it is readonly
-  starClass() {}
+  get starClass() {
+    return readOnly ? READ_ONLY_CLASS : EDITABLE_CLASS;
+  }
 
   // Render callback to load the script once the component renders.
   renderedCallback() {
@@ -25,7 +33,23 @@ export default class FiveStarRating extends LightningElement {
   //Method to load the 3rd party script and initialize the rating.
   //call the initializeRating function after scripts are loaded
   //display a toast with error message if there is an error loading script
-  loadScript() {}
+  loadScript() {
+    Promise.all([
+      loadStyle(this, fivestar + '/rating.css'),
+      loadScript(this, fivestar + '/rating.js')
+    ]).then(() => {
+      let result = initializeRating();
+  })
+  .catch(error => {
+    const evt = new ShowToastEvent({
+      title: ERROR_TITLE,
+      variant: ERROR_VARIANT,
+      message: error
+    });
+    this.dispatchEvent(evt);
+  })
+  .finally(() => {});
+  }
 
   initializeRating() {
     let domEl = this.template.querySelector('ul');
