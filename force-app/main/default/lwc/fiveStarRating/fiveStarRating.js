@@ -38,7 +38,7 @@ export default class FiveStarRating extends LightningElement {
       loadStyle(this, fivestar + '/rating.css'),
       loadScript(this, fivestar + '/rating.js')
     ]).then(() => {
-      let result = initializeRating();
+      let result = this.initializeRating();
   })
   .catch(error => {
     const evt = new ShowToastEvent({
@@ -70,5 +70,8 @@ export default class FiveStarRating extends LightningElement {
 
   // Method to fire event called ratingchange with the following parameter:
   // {detail: { rating: CURRENT_RATING }}); when the user selects a rating
-  ratingChanged(rating) {}
+  ratingChanged(rating) {
+    const selectEvent=new CustomEvent('ratingchange', {detail : {rating : rating}});
+    this.dispatchEvent(selectEvent);
+  }
 }
