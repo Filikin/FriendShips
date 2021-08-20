@@ -38,11 +38,17 @@ export default class BoatDetailTabs extends LightningElement {
   
   // Decide when to show or hide the icon
   // returns 'utility:anchor' or null
-  get detailsTabIconName() { }
+  get detailsTabIconName() { 
+    if (this.wiredRecord.data){
+      return 'utility:anchor';
+    } else {
+      return null;
+    }
+  }
   
   // Utilize getFieldValue to extract the boat name from the record wire
   get boatName() { 
-    return getFieldValue (this.wiredRecord.detailsTabIconName, BOAT_NAME_FIELD);
+    return getFieldValue (this.wiredRecord.data, BOAT_NAME_FIELD);
   }
   
   // Private
