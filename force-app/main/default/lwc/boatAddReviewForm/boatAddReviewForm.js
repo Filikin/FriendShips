@@ -27,7 +27,11 @@ export default class BoatAddReviewForm extends LightningElement {
     // Custom submission handler to properly set Rating
     // This function must prevent the anchor element from navigating to a URL.
     // form to be submitted: lightning-record-edit-form
-    handleSubmit(event) { }
+    handleSubmit(event) {
+      const selectEvent=new CustomEvent('createreview', {detail : {boatId : this.boatId}});
+      this.dispatchEvent(selectEvent);
+      this.handleReset();
+     }
     
     // Shows a toast message once form is submitted successfully
     // Dispatches event when a review is created

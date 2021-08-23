@@ -1,9 +1,12 @@
 <template>
     <!-- div for when there are no reviews available -->
-    <div>No reviews available</div>
+    <div if:false={reviewsToShow}>No reviews available</div>
     <!-- div for when there are reviews available -->
-    <div>
+    <div if:true={reviewsToShow}>
     <!-- insert spinner -->
+      <template if:true={isLoading}>
+          <lightning-spinner variant="brand" alternative-text="Loading"></lightning-spinner>
+      </template>
       <ul class="slds-feed__list">
         <!-- start iteration -->
           <li class="slds-feed__item" key={boatReview.Id}>

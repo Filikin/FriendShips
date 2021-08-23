@@ -20,10 +20,10 @@
                 </lightning-card>
             </lightning-tab>
             <lightning-tab label={label.labelReviews} value="reviews">
-              <c-boat-reviews boat-id={boatId}></c-boat-reviews>
+              <c-boat-reviews boat-id={recordId}></c-boat-reviews>
             </lightning-tab>
             <lightning-tab label={label.labelAddReview}>
-              <c-boat-add-review-form boat-id={boatId} oncreatereview={handleReviewCreated}></c-boat-add-review-form>
+              <c-boat-add-review-form boat-id={recordId} oncreatereview={handleReviewCreated}></c-boat-add-review-form>
             </lightning-tab>
         </lightning-tabset>
 
