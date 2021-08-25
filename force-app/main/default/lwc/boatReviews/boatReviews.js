@@ -32,7 +32,10 @@ export default class BoatReviews extends NavigationMixin(LightningElement) {
     }
     
     // Public method to force a refresh of the reviews invoking getReviews
-    refresh() { }
+    @api
+    refresh() { 
+      this.getReviews();
+    }
     
     // Imperative Apex call to get reviews for given boat
     // returns immediately if boatId is empty or null
