@@ -69,6 +69,7 @@ public with sharing class BoatDataService {
 
     @AuraEnabled(cacheable=false)
     public static List<BoatReview__c> getAllReviews(Id boatId) {
+        system.debug ('Boat ID is ' + boatId);
         return [
             SELECT
                 Id,

@@ -46,11 +46,11 @@ export default class BoatReviews extends NavigationMixin(LightningElement) {
         return;
       } 
       this.isLoading = true;
-      boatReviewsList({Id: this.recordId})
-      .then(({error, data}) => {
-        if (data){
-          this.boatReviews = JSON.parse(data);
-        } else if (error){
+      boatReviewsList({boatId: this.boatId})
+      .then(result => {
+        this.boatReviews = result;
+      })
+      .catch (error => {
           const evt = new ShowToastEvent({
             title: ERROR_TITLE,
             variant: ERROR_VARIANT,
@@ -58,16 +58,7 @@ export default class BoatReviews extends NavigationMixin(LightningElement) {
           });
           this.dispatchEvent(evt);
         }
-      })
-      .catch(error => {
-        const evt = new ShowToastEvent({
-          title: ERROR_TITLE,
-          variant: ERROR_VARIANT,
-          message: error
-        });
-        this.dispatchEvent(evt);
-      })
-      .finally(() => {});
+      )
       this.isLoading = false;
      }
     
