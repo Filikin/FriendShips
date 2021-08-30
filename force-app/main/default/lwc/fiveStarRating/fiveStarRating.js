@@ -8,7 +8,7 @@ const ERROR_VARIANT = 'error';
 const EDITABLE_CLASS  = 'c-rating-wrapper';
 const READ_ONLY_CLASS  = 'readonly c-rating-wrapper';
 
-export default class FiveStarRating extends LightningElement {
+export default class FiveStarRating extends fivestar(LightningElement) {
   //initialize public readOnly and value properties
   readOnly=false;
   value=5;
@@ -34,11 +34,14 @@ export default class FiveStarRating extends LightningElement {
   //call the initializeRating function after scripts are loaded
   //display a toast with error message if there is an error loading script
   loadScript() {
+    alert ("Loadscript");
     Promise.all([
       loadStyle(this, fivestar + '/rating.css'),
       loadScript(this, fivestar + '/rating.js')
     ]).then(() => {
+      alert ("Initialise");
       let result = this.initializeRating();
+      alert ("result: " + result);
   })
   .catch(error => {
     const evt = new ShowToastEvent({

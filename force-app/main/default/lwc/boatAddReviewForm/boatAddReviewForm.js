@@ -35,7 +35,9 @@ export default class BoatAddReviewForm extends LightningElement {
     }
     
     // Gets user rating input from stars component
-    handleRatingChanged(event) { }
+    handleRatingChanged(event) { 
+      alert ("rating changed");
+    }
     
     // Custom submission handler to properly set Rating
     // This function must prevent the anchor element from navigating to a URL.
