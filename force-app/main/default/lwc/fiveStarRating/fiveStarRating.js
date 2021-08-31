@@ -1,24 +1,25 @@
+import { LightningElement, wire, api, track } from 'lwc';
 import { loadStyle, loadScript } from 'lightning/platformResourceLoader';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-//import fivestar static resource, call it fivestar
-import firestar from '@salesforce/resourceUrl/fivestar';
+import fivestar from '@salesforce/resourceUrl/fivestar';
+
 // add constants here
 const ERROR_TITLE   = 'Error loading five-star';
 const ERROR_VARIANT = 'error';
 const EDITABLE_CLASS  = 'c-rating-wrapper';
 const READ_ONLY_CLASS  = 'readonly c-rating-wrapper';
 
-export default class FiveStarRating extends fivestar(LightningElement) {
-  //initialize public readOnly and value properties
+export default class FiveStarRating extends LightningElement {
+  @api
   readOnly=false;
-  value=5;
+  @api
+  value=0;
 
   editedValue;
   isRendered;
 
-  //getter function that returns the correct class depending on if it is readonly
   get starClass() {
-    return readOnly ? READ_ONLY_CLASS : EDITABLE_CLASS;
+    return this.readOnly ? READ_ONLY_CLASS : EDITABLE_CLASS;
   }
 
   // Render callback to load the script once the component renders.
@@ -34,20 +35,17 @@ export default class FiveStarRating extends fivestar(LightningElement) {
   //call the initializeRating function after scripts are loaded
   //display a toast with error message if there is an error loading script
   loadScript() {
-    alert ("Loadscript");
     Promise.all([
-      loadStyle(this, fivestar + '/rating.css'),
-      loadScript(this, fivestar + '/rating.js')
+      loadScript(this, fivestar + '/rating.js'),
+      loadStyle(this, fivestar + '/rating.css')
     ]).then(() => {
-      alert ("Initialise");
-      let result = this.initializeRating();
-      alert ("result: " + result);
+      this.initializeRating();
   })
   .catch(error => {
     const evt = new ShowToastEvent({
       title: ERROR_TITLE,
       variant: ERROR_VARIANT,
-      message: error
+      message: error.message
     });
     this.dispatchEvent(evt);
   })
