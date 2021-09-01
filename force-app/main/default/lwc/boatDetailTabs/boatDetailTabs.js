@@ -95,7 +95,7 @@ export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
   handleReviewCreated() {
     let tabSet = this.template.querySelector('lightning-tabset');
     tabSet.activeTabValue='reviews';
-    let boatReview = this.template.querySelector('c-boat-reviews');
+    let boatReview = this.template.querySelector('c-boat-reviews'); // this fails!
     if (boatReview){
       boatReview.refresh();
     }
