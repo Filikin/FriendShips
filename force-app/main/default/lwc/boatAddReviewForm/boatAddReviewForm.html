@@ -1,7 +1,6 @@
 <template>
     <!-- lightning data service code -->
     <lightning-record-edit-form object-api-name="BoatReview__c" onsuccess={handleSuccess} onsubmit={handleSubmit}>
-      <lightning-messages></lightning-messages>
       <lightning-layout multiple-rows vertical-align="start">
         <lightning-layout-item size="8" padding="horizontal-small">
           <div class="slds-form-element">
@@ -15,7 +14,7 @@
             <div class="slds-form-element__control">
               <!-- add five star rating component -->
               <label for="rating" class="slds-form-element__label">{labelRating}</label>
-              <c-five-star-rating id="rating" onratingchange={handleRatingChange}></c-five-star-rating>
+              <c-five-star-rating onratingchange={handleRatingChange}></c-five-star-rating>
             </div>
           </div>
         </lightning-layout-item>

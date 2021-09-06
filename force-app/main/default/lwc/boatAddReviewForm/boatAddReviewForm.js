@@ -36,7 +36,8 @@ export default class BoatAddReviewForm extends LightningElement {
     
     // Gets user rating input from stars component
     handleRatingChanged(event) { 
-      rating = event.detail.rating;
+      alert ("handle rating");
+      this.rating = event.detail.rating;
     }
     
     // Custom submission handler to properly set Rating
@@ -45,15 +46,14 @@ export default class BoatAddReviewForm extends LightningElement {
     handleSubmit(event) {
       event.preventDefault();
       const inputFields = event.detail.fields;
-      // need to add the Boat__c and the rating
-   
-    this.template.querySelector('lightning-record-edit-form').submit(inputFields);
+      inputFields.Boat__c = this.boatId;
+      inputFields.Rating__c = this.rating;
+      this.template.querySelector('lightning-record-edit-form').submit(inputFields);
     }
     
     // Shows a toast message once form is submitted successfully
     // Dispatches event when a review is created
     handleSuccess() {
-      // TODO: dispatch the custom event and show the success message
       const selectEvent=new CustomEvent('createreview', {detail : {boatId : this.boatId}});
       this.dispatchEvent(selectEvent);
 
