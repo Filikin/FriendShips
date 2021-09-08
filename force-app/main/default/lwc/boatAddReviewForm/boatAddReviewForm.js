@@ -15,7 +15,7 @@ const SUCCESS_VARIANT = 'success';
 export default class BoatAddReviewForm extends LightningElement {
     // Private
     boatId;
-    rating;
+    rating=0;
     boatReviewObject = BOAT_REVIEW_OBJECT;
     nameField        = NAME_FIELD;
     commentField     = COMMENT_FIELD;
@@ -36,7 +36,6 @@ export default class BoatAddReviewForm extends LightningElement {
     
     // Gets user rating input from stars component
     handleRatingChanged(event) { 
-      alert ("handle rating");
       this.rating = event.detail.rating;
     }
     

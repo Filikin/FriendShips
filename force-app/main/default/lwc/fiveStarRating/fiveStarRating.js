@@ -1,4 +1,4 @@
-import { LightningElement, wire, api, track } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import { loadStyle, loadScript } from 'lightning/platformResourceLoader';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import fivestar from '@salesforce/resourceUrl/fivestar';
@@ -19,7 +19,7 @@ export default class FiveStarRating extends LightningElement {
   isRendered;
 
   get starClass() {
-    return this.readOnly===false ? READ_ONLY_CLASS : EDITABLE_CLASS;
+    return this.readOnly ? READ_ONLY_CLASS : EDITABLE_CLASS;
   }
 
   // Render callback to load the script once the component renders.
@@ -72,7 +72,6 @@ export default class FiveStarRating extends LightningElement {
   // Method to fire event called ratingchange with the following parameter:
   // {detail: { rating: CURRENT_RATING }}); when the user selects a rating
   ratingChanged(rating) {
-    alert (rating);
     const selectEvent=new CustomEvent('ratingchange', {detail : {rating : rating}});
     this.dispatchEvent(selectEvent);
   }
