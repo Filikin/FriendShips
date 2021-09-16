@@ -6,8 +6,10 @@
         <lightning-layout-item size="8" padding="horizontal-small">
           <div class="slds-form-element">
              <!-- review subject field code using nameField -->
-             <label for="reviewsubject" class="slds-form-element__label">{labelSubject}</label>
-             <lightning-input-field field-name={nameField} variant="label-hidden" id="reviewSubject" required="true"></lightning-input-field>
+             <label for={nameField} class="slds-form-element__label">{labelSubject}</label>
+             <div class="slds-form-element__control">
+              <lightning-input-field field-name={nameField} variant="label-hidden" required></lightning-input-field>
+              </div>
           </div>
         </lightning-layout-item>
         <lightning-layout-item size="4" padding="horizontal-small">
@@ -15,13 +17,13 @@
             <label for="record-name" class="slds-form-element__label">{labelRating}</label>
             <div class="slds-form-element__control">
               <!-- add five star rating component -->
-              <c-five-star-rating value={rating} onratingchange={handleRatingChange}></c-five-star-rating>
+              <c-five-star-rating onratingchange={handleRatingChange}></c-five-star-rating>
             </div>
           </div>
         </lightning-layout-item>
         <lightning-layout-item padding="horizontal-small">
              <!-- review comment field code using commentField -->
-             <lightning-input-field field-name={commentField} variant="label-stacked" required="true"></lightning-input-field>
+             <lightning-input-field field-name={commentField} variant="label-stacked" required></lightning-input-field>
         </lightning-layout-item>
       </lightning-layout>
       <div class="slds-align_absolute-center" style="margin-top: 5px">
