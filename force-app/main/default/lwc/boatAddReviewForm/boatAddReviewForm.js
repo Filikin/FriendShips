@@ -36,7 +36,6 @@ export default class BoatAddReviewForm extends LightningElement {
     
     // Gets user rating input from stars component
     handleRatingChanged(event) { 
-      alert ("rating changed");
       this.rating = event.detail.rating;
     }
     
