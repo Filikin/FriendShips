@@ -10,7 +10,7 @@ export default class BoatReviews extends NavigationMixin(LightningElement) {
     // Private
     boatId;
     error;
-    boatReviews;
+    boatReviews = null;
     isLoading;
     
     // Getter and Setter to allow for logic to run on recordId change
@@ -28,7 +28,11 @@ export default class BoatReviews extends NavigationMixin(LightningElement) {
     }
     // Getter to determine if there are reviews to display
     get reviewsToShow() { 
-      return this.boatReviews != null;
+      if (this.boatReviews == null || this.boatReviews == undefined || this.boatReviews.length === 0){
+        return false;
+      } else {
+        return true;
+      }
     }
     
     // Public method to force a refresh of the reviews invoking getReviews
