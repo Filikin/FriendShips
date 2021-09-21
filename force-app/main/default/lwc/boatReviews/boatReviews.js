@@ -71,8 +71,8 @@ export default class BoatReviews extends NavigationMixin(LightningElement) {
       this[NavigationMixin.Navigate]({
         type: 'standard__recordPage',
         attributes: {
-            recordId: this.boatId, // review from event id?
-            objectApiName: 'BoatReview__c', // objectApiName is optional
+            recordId: event.target.dataset.recordId, // review from event id?
+            objectApiName: 'User', // objectApiName is optional
             actionName: 'view'
         }
     });
