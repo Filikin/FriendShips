@@ -1,7 +1,7 @@
 // imports
 import { LightningElement, api, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-import boatReviewsList from '@salesforce/apex/BoatDataService.getAllReviews';
+import getAllReviews from '@salesforce/apex/BoatDataService.getAllReviews';
 
 const ERROR_TITLE   = 'Error';
 const ERROR_VARIANT = 'error';
@@ -50,7 +50,7 @@ export default class BoatReviews extends NavigationMixin(LightningElement) {
         return;
       } 
       this.isLoading = true;
-      boatReviewsList({boatId: this.boatId})
+      getAllReviews({boatId: this.boatId})
       .then(result => {
         this.boatReviews = result;
       })

@@ -20,6 +20,7 @@ import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
 // import BOAT_ID_FIELD for the Boat Id
 // import BOAT_NAME_FIELD for the boat Name
 const BOAT_FIELDS = [BOAT_ID_FIELD, BOAT_NAME_FIELD];
+const PLEASE_SELECT_A_BOAT_SYTLE = 'no-boat-height';
 export default class BoatDetailTabs extends NavigationMixin(LightningElement) {
   boatId;
   // Initialize messageContext for Message Service
