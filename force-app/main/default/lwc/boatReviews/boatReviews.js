@@ -79,4 +79,3 @@ export default class BoatReviews extends NavigationMixin(LightningElement) {
 
     }
   }
-  

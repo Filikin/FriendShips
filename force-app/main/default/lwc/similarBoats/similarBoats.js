@@ -33,4 +33,3 @@ export default class SimilarBoats extends LightningElement {
     // Navigate to record page
     openBoatDetailPage(event) { }
   }
-  
