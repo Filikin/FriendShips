@@ -14,7 +14,7 @@
 		<name>ApexComponent</name>
 	</types>
 	<types>
-		<members>*</members>
+		<members>SimilarBoats</members>
 		<name>ApexPage</name>
 	</types>
 	<types>
