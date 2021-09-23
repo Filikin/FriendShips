@@ -1,28 +1,46 @@
 // imports
-import { LightningElement } from 'lwc';
+import { LightningElement, wire, api, track } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 // import getSimilarBoats
+import getSimilarBoats from '@salesforce/apex/BoatDataService.getSimilarBoats';
+
 export default class SimilarBoats extends LightningElement {
     // Private
     currentBoat;
-    relatedBoats;
+    @track relatedBoats;
     boatId;
     error;
     
     // public
+    @api
     get recordId() {
         // returns the boatId
+        alert (this.boatId);
+        return this.boatId;
       }
       set recordId(value) {
           // sets the boatId value
+          this.boatId = value;
           // sets the boatId attribute
-      }
+          this.setAttribute('boatId', value); // not sure of the point of this
+        }
     
     // public
-    similarBy;
+    @api similarBy;
     
     // Wire custom Apex call, using the import named getSimilarBoats
     // Populates the relatedBoats list
-    similarBoats({ error, data }) { }
+    @wire (getSimilarBoats, {boatd: '$boatd', similarBy: '$similarBy'})
+    similarBoats({ error, data }) { 
+      if (data) {
+        alert (data);
+        this.relatedBoats = data;
+      } else if (error) {
+        alert (error);
+        this.relatedBoats = undefined;
+        this.error = error;
+      }
+    }
     get getTitle() {
       return 'Similar boats by ' + this.similarBy;
     }
@@ -31,5 +49,14 @@ export default class SimilarBoats extends LightningElement {
     }
     
     // Navigate to record page
-    openBoatDetailPage(event) { }
+    openBoatDetailPage(event) { 
+      this[NavigationMixin.Navigate]({
+        type: 'standard__recordPage',
+        attributes: {
+            recordId: event.target.dataset.recordId, 
+            objectApiName: 'Boat__c', // objectApiName is optional
+            actionName: 'view'
+        }
+      });
+    }
   }
