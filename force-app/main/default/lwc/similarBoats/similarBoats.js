@@ -4,7 +4,7 @@ import { NavigationMixin } from 'lightning/navigation';
 // import getSimilarBoats
 import getSimilarBoats from '@salesforce/apex/BoatDataService.getSimilarBoats';
 
-export default class SimilarBoats extends LightningElement {
+export default class SimilarBoats extends NavigationMixin(LightningElement) {
     // Private
     currentBoat;
     @track relatedBoats;
@@ -15,7 +15,6 @@ export default class SimilarBoats extends LightningElement {
     @api
     get recordId() {
         // returns the boatId
-        alert (this.boatId);
         return this.boatId;
       }
       set recordId(value) {
@@ -30,13 +29,11 @@ export default class SimilarBoats extends LightningElement {
     
     // Wire custom Apex call, using the import named getSimilarBoats
     // Populates the relatedBoats list
-    @wire (getSimilarBoats, {boatd: '$boatd', similarBy: '$similarBy'})
+    @wire (getSimilarBoats, {boatId: '$boatId', similarBy: '$similarBy'})
     similarBoats({ error, data }) { 
       if (data) {
-        alert (data);
         this.relatedBoats = data;
       } else if (error) {
-        alert (error);
         this.relatedBoats = undefined;
         this.error = error;
       }
@@ -53,7 +50,7 @@ export default class SimilarBoats extends LightningElement {
       this[NavigationMixin.Navigate]({
         type: 'standard__recordPage',
         attributes: {
-            recordId: event.target.dataset.recordId, 
+            recordId: event.detail.boatId, 
             objectApiName: 'Boat__c', // objectApiName is optional
             actionName: 'view'
         }
